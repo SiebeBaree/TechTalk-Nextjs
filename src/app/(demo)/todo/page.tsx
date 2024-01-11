@@ -8,7 +8,8 @@ export default function TodoApp() {
     const [count, setCount] = useState<number>(0);
     const [todos, setTodos] = useState<Todo[]>([]);
 
-    const fetchTodos = async () => {
+    // Fetch todos from the API using a simple get request
+    const fetchTodos = async (): Promise<Todo[]> => {
         try {
             const response = await fetch('/api/todo');
             return await response.json();
@@ -17,9 +18,8 @@ export default function TodoApp() {
         }
     }
 
-    useEffect(() => {
-        fetchTodos().then(t => setTodos(t));
-    }, [count]);
+    // Fetch the todos when the component is mounted and when the count changes
+    // Tip: useEffect
 
     return (
         <div className="flex flex-col items-center">
@@ -38,23 +38,17 @@ function CreateTodo({setCount}: {
     const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        try {
-            const response = await fetch('/api/todo', {
-                method: 'POST',
-                body: JSON.stringify({todo}),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.status === 201) {
-                setTodo('');
-                setCount(c => c + 1);
-            } else {
-                alert('Error creating todo')
+        const response = await fetch('/api/todo', {
+            method: 'POST',
+            body: JSON.stringify({todo}),
+            headers: {
+                'Content-Type': 'application/json'
             }
-        } catch (e) {
-            alert('Error creating todo')
+        });
+
+        if (response.status === 201) {
+            setTodo('');
+            setCount(c => c + 1);
         }
     }
 
@@ -91,6 +85,7 @@ function TodoItem({todo}: { todo: Todo }) {
 
     const updateTodo = async (isChecked: boolean) => {
         try {
+            // Make a PUT request to the API to update the todo
             const response = await fetch(`/api/todo/${todo.id}`, {
                 method: 'PUT',
                 body: JSON.stringify({
@@ -101,6 +96,7 @@ function TodoItem({todo}: { todo: Todo }) {
                 }
             });
 
+            // If the request was successful, update the state, otherwise show an error
             if (response.ok) {
                 setCompleted(isChecked);
             } else {
@@ -123,6 +119,7 @@ function TodoItem({todo}: { todo: Todo }) {
         }
     }
 
+    // If you return null from a component, it will not be rendered
     if (isDeleted) return null;
     return (
         <div className="w-[300px] flex justify-between items-center gap-4">

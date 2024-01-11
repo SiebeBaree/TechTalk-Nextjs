@@ -1,6 +1,6 @@
 # Tech Talk: Next.js
 
-### By: [Siebe Baree](https://github.com/SiebeBaree) & [Olivier Jammaers](https://github.com/OlivierJammers)
+### By: [Siebe Baree](https://github.com/SiebeBaree) & [Olivier Jammaers](https://github.com/OlivierJammaers)
 
 ## What you will learn
 
